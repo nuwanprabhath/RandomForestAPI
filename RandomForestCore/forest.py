@@ -70,8 +70,8 @@ def predict_number_prob_all(keys):
     print "predict_number_prob_all prediction:", prediction[0]
     print "predict_number_prob_all classes:", model.classes_
 
-    df_result = pd.DataFrame({"DESTINATION": model.classes_, "PROBABILITY": prediction[0]}).sort_values(
-        by=["PROBABILITY"], ascending=False, kind="mergesort")
+    df_result = pd.DataFrame({"DESTINATION": model.classes_, "PROBABILITY": prediction[0]}).sort(
+        ["PROBABILITY"], ascending=0)
     result_json = {"NUMBERS": []}
     c = 0
     for index, row in df_result.iterrows():
