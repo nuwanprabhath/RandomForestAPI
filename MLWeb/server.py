@@ -51,4 +51,5 @@ def train():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.config.from_pyfile('../config.py')
+    app.run(debug=True, port=app.config['PORT'])
