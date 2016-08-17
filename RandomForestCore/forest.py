@@ -103,7 +103,7 @@ def train(keys):
 
 def regenerate_forest(train_set, target):
     print "regenerate_forest started"
-    rf = RandomForestClassifier(n_estimators=10, n_jobs=2)
+    rf = RandomForestClassifier(n_estimators=10, n_jobs=1)
     rf.fit(train_set, target)
     joblib.dump(rf, '../RandomForestCore/dataModel/trainedModel.pkl')
     print "regenerate_forest finished"
