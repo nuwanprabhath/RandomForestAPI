@@ -14,7 +14,8 @@ def predict_number(keys):
     print '----'
     print os.getcwd()
     print '----'
-    columns = pd.read_csv('../RandomForestCore/training.csv').columns.values[1:]
+    columns = pd.read_csv('../RandomForestCore/training.csv').columns.values
+    columns = columns[columns != "DESTINATION"]
     intial_data = [0] * len(columns)
     df = pd.DataFrame([intial_data], columns=columns)
 
@@ -26,14 +27,15 @@ def predict_number(keys):
     model = joblib.load('../RandomForestCore/dataModel/trainedModel.pkl')
 
     prediction = model.predict(df)
-    print "prediction in predict_number:", prediction[0]
-    result = {"number": prediction[0]}
-    print "forest result in predict_number:: " + str(result)
+    print "prediction in predict_number: ", prediction[0]
+    result = {"PREDICTION": prediction[0]}
+    print "forest result in predict_number: " + str(result)
     return result
 
 
 def predict_number_prob(keys):
-    columns = pd.read_csv('../RandomForestCore/training.csv').columns.values[1:]
+    columns = pd.read_csv('../RandomForestCore/training.csv').columns.values
+    columns = columns[columns != "DESTINATION"]
     intial_data = [0] * len(columns)
     df = pd.DataFrame([intial_data], columns=columns)
 
@@ -49,13 +51,14 @@ def predict_number_prob(keys):
     print 'max class: ' + str(model.classes_[max_index])
     print 'predictions: ' + str(prediction)
     print 'max prob: ' + str(prediction[0][max_index])
-    result = {"number": model.classes_[max_index], "pobability": prediction[0][max_index]}
+    result = {"PREDICTION": model.classes_[max_index], "PROBABILITY": prediction[0][max_index]}
     print result
     return result
 
 
 def predict_number_prob_all(keys):
-    columns = pd.read_csv('../RandomForestCore/training.csv').columns.values[1:]
+    columns = pd.read_csv('../RandomForestCore/training.csv').columns.values
+    columns = columns[columns != "DESTINATION"]
     intial_data = [0] * len(columns)
     df = pd.DataFrame([intial_data], columns=columns)
 
@@ -72,10 +75,10 @@ def predict_number_prob_all(keys):
 
     df_result = pd.DataFrame({"DESTINATION": model.classes_, "PROBABILITY": prediction[0]}).sort_values(
         by=["PROBABILITY"], ascending=False, kind="mergesort")
-    result_json = {"NUMBERS": []}
+    result_json = {"PREDICTIONS": []}
     c = 0
     for index, row in df_result.iterrows():
-        result_json["NUMBERS"].append({"NUMBER": row["DESTINATION"], "PROBABILITY": row["PROBABILITY"]})
+        result_json["PREDICTIONS"].append({"PREDICTION": row["DESTINATION"], "PROBABILITY": row["PROBABILITY"]})
         c += 1
         if c == 5:
             break
@@ -90,8 +93,6 @@ def train(keys):
     ndf = pd.concat([train_df, new_df], axis=0).fillna(value=0)
     target = ndf['DESTINATION']
     train_set = ndf.drop('DESTINATION', axis=1)
-    # print "In train target:", target
-    # print "In train target:", train
     ndf.to_csv('../RandomForestCore/training.csv', mode='w', header=True, sep=',', index=False, na_rep=0)
     regenerate_forest(train_set, target)
     print(ndf)
