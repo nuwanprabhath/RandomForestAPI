@@ -72,4 +72,4 @@ def reset_csv():
 
 if __name__ == '__main__':
     app.config.from_pyfile('../config.py')
-    app.run(debug=True, port=app.config['PORT'])
+    app.run('0.0.0.0', port=app.config['PORT'])
