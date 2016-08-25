@@ -89,10 +89,12 @@ def predict_number_prob_all(keys):
 def train(keys):
     print "In train keys: ", keys
     train_df = pd.read_csv('../RandomForestCore/training.csv').fillna(value=0)
-    new_df = pd.DataFrame(data=keys, index=[0], columns=keys.keys())
+    new_df = pd.DataFrame(data=keys, index=[1], columns=keys.keys())
     ndf = pd.concat([train_df, new_df], axis=0).fillna(value=0)
     target = ndf['DESTINATION']
-    train_set = ndf.drop('DESTINATION', axis=1)
+    train_set = ndf.drop(['DESTINATION'], axis=1)
+    # print "In train target:", target
+    # print "In train target:", train
     ndf.to_csv('../RandomForestCore/training.csv', mode='w', header=True, sep=',', index=False, na_rep=0)
     regenerate_forest(train_set, target)
     print(ndf)
@@ -101,10 +103,17 @@ def train(keys):
 
 def regenerate_forest(train_set, target):
     print "regenerate_forest started"
-    rf = RandomForestClassifier(n_estimators=10, n_jobs=2)
+    rf = RandomForestClassifier(n_estimators=10, n_jobs=1)
     rf.fit(train_set, target)
     joblib.dump(rf, '../RandomForestCore/dataModel/trainedModel.pkl')
     print "regenerate_forest finished"
+
+
+def reset_csv():
+    print "resetting csv in forest"
+    df = pd.DataFrame([[0]], columns=["DESTINATION"])
+    df.to_csv('../RandomForestCore/training.csv', mode='w', header=True, sep=',', index=False, na_rep=0)
+    return "success"
 
 
 def main():

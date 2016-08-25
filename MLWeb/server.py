@@ -62,6 +62,14 @@ def train():
         return jsonify("Bad request. Json is empty"), 400
 
 
+@app.route('/resetCsv', methods=['GET'])
+def reset_csv():
+    print "keys in predict"
+    response = forest.reset_csv()
+    print "Sending response in resetCsv", response
+    return jsonify(response), 200
+
+
 if __name__ == '__main__':
     app.config.from_pyfile('../config.py')
     app.run(debug=True, port=app.config['PORT'])
