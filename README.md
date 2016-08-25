@@ -66,4 +66,11 @@
               Request: {"DESTINATION":1, "STATE": 3, "INTENTION": 2, "FISH":4}
               Response: "success"
     ```  
-                       
+           
+5. `/resetCsv`
+    Remove all data from training CSV and adds only column DESTINATION 
+    ```    
+        Method Type: GET
+        Example: 
+              Response: "success"
+    ```  
